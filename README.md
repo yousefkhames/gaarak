@@ -1,16 +1,75 @@
+<div align="center">
+
+<img src="public/logo.svg" width="84" alt="Gaarak logo">
+
 # جارك | Gaarak
-Post a small task on the map. The nearest neighbor helps and earns points that convert to cash.
-- Frontend: vanilla JS + Leaflet + OpenStreetMap (free), Arabic RTL and English.
-- Backend: zero-dependency Node server (`npm start`), JSON file store, REST API.
-- Static hosting: with no backend the app falls back to a localStorage demo store.
-## API
-`GET /api/requests`, `POST /api/requests`, `POST /api/requests/:id/accept`, `POST /api/requests/:id/done`
-## Notes
-Demo rate: 1 point = 0.5 EGP. Real payouts, auth and abuse protection are the next step.
+
+**A neighborhood help map. Post a small task, the nearest neighbor helps, and earns points.**
+
+[**Live demo**](https://yousefkhames.github.io/gaarak/) · Arabic (Egyptian) + English · RTL · dark mode · installable PWA
+
+</div>
+
+<p align="center">
+  <img src="assets/desktop-ar.png" width="62%" alt="Gaarak desktop, Arabic">
+  <img src="assets/mobile-ar.png" width="24%" alt="Gaarak mobile, Arabic">
+</p>
+<p align="center">
+  <img src="assets/desktop-en.png" width="62%" alt="Gaarak desktop, English">
+  <img src="assets/mobile-dark-en.png" width="24%" alt="Gaarak mobile, dark mode, English">
+</p>
+
+## What it does
+
+Someone needs a hand: medicine from the pharmacy, a dead car battery, help with Wi-Fi. They tap the map, describe the task and set a reward in points. Neighbors see requests sorted by urgency and distance, accept one, finish it and collect points that convert to cash.
 
 ## Features
-Map with category pins, search/sort/radius, urgent flag, accept and complete, ratings, cancel own request, points wallet with demo withdrawal and history, Arabic (Egyptian) and English, RTL, dark mode, installable PWA with offline cache, keyboard and screen-reader support, mobile bottom-sheet layout.
-## Backend notes
-Zero dependencies, 10 KB body limit, 60 write requests per minute per IP, input sanitizing. Not included yet: auth, real payments, moderation.
-## Deploy
-GitHub Pages serves `/docs` (copy of `/public`). Run `npm start` to serve with the live API.
+
+- Live map (OpenStreetMap + Leaflet) with colored category pins and a locate-me button
+- Post a request in three taps: place on map, title and details, reward, urgent flag
+- Search, sort (nearest, top reward, newest), radius filter and category chips
+- Accept, mark done, rate the helper, cancel your own request, report and hide a request
+- Points wallet with balance in EGP, simulated withdrawal (Vodafone Cash, InstaPay, Fawry) and history
+- Heroes leaderboard and a stats strip
+- Share a link that opens straight on a request (`#r=id`)
+- Arabic (Egyptian wording, Arabic-Indic digits, relative time) and English, full RTL support
+- Dark mode, mobile bottom-sheet layout, 44px touch targets, installable PWA with offline cache
+- Accessibility: skip link, ARIA labels and live regions, visible focus, keyboard use, reduced-motion support
+
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Frontend | Vanilla JavaScript, CSS, Leaflet, OpenStreetMap tiles |
+| Backend | Zero-dependency Node.js REST server, JSON file store |
+| Hosting | GitHub Pages (static, serves `/docs`) |
+| Tests | Puppeteer click-through suite in `tests/qa.js` (desktop and mobile, Arabic and English) |
+
+## Run it
+
+```bash
+git clone https://github.com/yousefkhames/gaarak.git
+cd gaarak
+npm start            # http://localhost:3000 with the live API
+```
+
+Static only: open `public/index.html` through any static server. Without the API the app uses a localStorage demo store seeded with sample requests around Alexandria.
+
+API: `GET /api/requests`, `POST /api/requests`, `POST /api/requests/:id/accept`, `POST /api/requests/:id/done`, `POST /api/requests/:id/rate`, `DELETE /api/requests/:id`.
+
+Tests: `npm i puppeteer-core`, serve `public/` on port 8123, then `node tests/qa.js` (needs Google Chrome at `/usr/bin/google-chrome`).
+
+## Honest limits
+
+- The hosted demo runs in localStorage mode, so requests are not shared between visitors. The Node backend exists but is not hosted for free.
+- Withdrawals are simulated. No real money moves.
+- No login, identity checks or moderation yet. A real launch needs auth, abuse reporting on the server and a payments partner.
+- Sample requests are fictional.
+
+## Roadmap
+
+Accounts and phone verification, a hosted shared backend, real-time updates, chat between requester and helper, server-side moderation, real payouts.
+
+## License
+
+MIT. Map data © OpenStreetMap contributors.
