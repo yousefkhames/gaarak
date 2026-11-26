@@ -1,4 +1,4 @@
-:root{--ink:#12353a;--bg:#f6f1e7;--card:#fff;--or:#ff7a3d;--or2:#ffb347;--mut:#6b7f82;--ok:#1f9d6b}
+:root{--ink:#12353a;--bg:#f6f1e7;--card:#fff;--fg:#12353a;--or:#ff7a3d;--or2:#ffb347;--mut:#6b7f82;--ok:#1f9d6b}
 *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--ink);height:100vh;display:flex;flex-direction:column}
 header{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;background:var(--ink);color:#fff}
 .brand{display:flex;gap:10px;align-items:center}.brand img{width:38px}.brand b{font-size:22px;display:block;line-height:1}.brand small{color:var(--or2);letter-spacing:2px}
@@ -51,3 +51,15 @@ label{display:block;margin:10px 0}label span{display:block;font-size:13px;color:
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.tools #q{grid-column:1/-1}
 .safe{background:#fff3e8;border-radius:10px;padding:8px 12px;font-size:13px;margin:6px 0}.stars button{background:transparent;color:#f5a623;font-size:22px;padding:0 4px;min-height:36px}
 .walletBtn{background:transparent;color:#fff;display:flex;gap:6px;align-items:center;padding:2px 4px}.bal{font-size:30px;font-weight:800;margin:6px 0}.bal small{font-size:14px;color:var(--mut);font-weight:400}#whist{max-height:160px;overflow:auto}
+
+.stats{display:flex;gap:8px;margin:0 0 10px}.stats div{flex:1;background:#fff;border-radius:12px;padding:8px;text-align:center;font-size:12px;color:var(--mut)}.stats b{display:block;font-size:20px;color:var(--ink)}
+.card{animation:rise .35s ease both}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-1px);box-shadow:0 6px 16px #12353a22}.card{transition:.2s}
+@media(prefers-color-scheme:dark){
+ :root{--bg:#0e2427;--card:#17383d;--mut:#9db3b6}
+ body,input,select,dialog{color:#eaf2f2}input,select{background:#0e2427;border-color:#2b4f55}dialog{background:#17383d}
+ button{background:#24474d;color:#eaf2f2}.chip{background:#17383d;border-color:#2b4f55;color:#eaf2f2}.lb,.stats div{background:#17383d}.stats b,.hero h1{color:#fff}
+ .pts{background:#3a2a20}.safe{background:#3a2a20}.tabs .on{background:var(--or)}.meta,.mut{color:#9db3b6}.card{color:#eaf2f2}
+ .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9)}
+ #locate{background:#17383d;color:#fff}.skip{color:#12353a}
+}
