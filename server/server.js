@@ -13,6 +13,10 @@ http.createServer(async(req,res)=>{
   if(!b.title||typeof b.lat!=='number'||typeof b.lng!=='number')return json(res,400,{error:'title, lat, lng required'});
   const d=load(),r={id:'r'+Date.now(),title:String(b.title).slice(0,80),cat:b.cat||'other',reward:Math.min(500,Math.max(5,+b.reward||20)),urgent:!!b.urgent,lat:b.lat,lng:b.lng,by:b.by||'me',status:'open',at:Date.now()};
   d.unshift(r);save(d);return json(res,201,r)}
+ const dm=u.match(/^\/api\/requests\/([\w-]+)$/);
+ if(dm&&req.method==='DELETE'){const d=load().filter(x=>x.id!==dm[1]);save(d);return json(res,200,{ok:true})}
+ const rm=u.match(/^\/api\/requests\/([\w-]+)\/rate$/);
+ if(rm&&req.method==='POST'){const b=await body(req),d=load(),r=d.find(x=>x.id===rm[1]);if(!r||r.status!=='done')return json(res,409,{error:'not done'});r.rating=Math.min(5,Math.max(1,+b.rating||5));save(d);return json(res,200,r)}
  const m=u.match(/^\/api\/requests\/([\w-]+)\/(accept|done)$/);
  if(m&&req.method==='POST'){const b=await body(req),d=load(),r=d.find(x=>x.id===m[1]);if(!r)return json(res,404,{error:'not found'});
   if(m[2]==='accept'){if(r.status!=='open')return json(res,409,{error:'taken'});r.status='taken';r.helper=b.user||'me'}

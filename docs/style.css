@@ -49,3 +49,4 @@ label{display:block;margin:10px 0}label span{display:block;font-size:13px;color:
 }
 #add::before{content:"+ ";font-weight:900}
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.tools #q{grid-column:1/-1}
+.safe{background:#fff3e8;border-radius:10px;padding:8px 12px;font-size:13px;margin:6px 0}.stars button{background:transparent;color:#f5a623;font-size:22px;padding:0 4px;min-height:36px}
