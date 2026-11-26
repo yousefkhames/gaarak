@@ -13,7 +13,7 @@
 <a class="skip" href="#list" data-t="skip">تخطي للقائمة</a>
 <header role="banner">
   <div class="brand"><img src="logo.svg" alt=""><div><b>جارك</b><small>Gaarak</small></div></div>
-  <div class="me"><span id="wallet">0</span> <span data-t="pts">نقطة</span><button id="lang" class="ghost">EN</button></div>
+  <div class="me"><button id="walletBtn" type="button" class="walletBtn"><span id="wallet">0</span> <span data-t="pts">نقطة</span></button><button id="lang" class="ghost">EN</button></div>
 </header>
 <main id="main">
   <section id="mapwrap"><div id="map" role="region" aria-label="خريطة طلبات المساعدة"></div>
@@ -37,6 +37,15 @@
   <label><span data-t="reward">المكافأة (نقاط)</span><input name="reward" type="number" min="5" max="500" value="30"></label>
   <label class="chk"><input type="checkbox" name="urgent"> <span data-t="urgent">مستعجل</span></label>
   <div class="row"><button value="cancel" class="ghost" data-t="cancel">إلغاء</button><button id="submit" value="ok" class="primary" data-t="post">انشر الطلب</button></div>
+</form></dialog>
+<dialog id="wdlg" aria-labelledby="wt"><form method="dialog" id="wform">
+  <h3 id="wt" data-t="wallet">محفظتي</h3>
+  <div class="bal"><b id="wbal">0</b> <span data-t="pts">نقطة</span> <small id="wegp"></small></div>
+  <p class="safe" data-t="demo">نسخة تجريبية: السحب هنا محاكاة ومفيش فلوس حقيقية بتتحرك.</p>
+  <label><span data-t="method">طريقة السحب</span><select id="wm"><option>Vodafone Cash</option><option>InstaPay</option><option>Fawry</option></select></label>
+  <label><span data-t="num">رقم المحفظة</span><input id="wn" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx"></label>
+  <h4 data-t="hist">السجل</h4><div id="whist"></div>
+  <div class="row"><button value="cancel" data-t="close">إغلاق</button><button type="button" id="wgo" class="primary" data-t="withdraw">اسحب</button></div>
 </form></dialog>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
