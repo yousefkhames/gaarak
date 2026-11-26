@@ -6,7 +6,7 @@ const URL=process.argv[2]||'http://localhost:8123/';
  for(const [name,vp,lang] of [['desk-ar',{width:1300,height:800},'ar'],['desk-en',{width:1300,height:800},'en'],['mob-ar',{width:390,height:780,isMobile:true,hasTouch:true},'ar'],['mob-en',{width:390,height:780,isMobile:true,hasTouch:true},'en']]){
   const p=await b.newPage();await p.setViewport(vp);const errs=[];
   p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error'&&!/tile|ERR_|Failed to load resource/.test(m.text()))errs.push(m.text())});
-  await p.evaluateOnNewDocument(l=>{localStorage.gk_lang=l;if(!sessionStorage.x){localStorage.removeItem('gk_reqs');localStorage.removeItem('gk_wd');sessionStorage.x=1}},lang);
+  await p.evaluateOnNewDocument(l=>{localStorage.gk_lang=l;if(!sessionStorage.x){localStorage.removeItem('gk_reqs');localStorage.removeItem('gk_wd');localStorage.removeItem('gk_ui');sessionStorage.x=1}},lang);
   const ok=(c,m)=>{if(!c){fails++;console.log('FAIL',name,m)}};
   try{
    await p.goto(URL,{waitUntil:'networkidle2',timeout:30000});

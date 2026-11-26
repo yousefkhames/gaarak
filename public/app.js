@@ -4,7 +4,8 @@ const PATH={groc:'M6 6h15l-2 9H8zM6 6L5 3H2M9 20a1 1 0 100-2 1 1 0 000 2zM18 20a
 const COL={groc:'#e8742c',tech:'#2d7ff9',car:'#d6455d',care:'#1f9d6b',move:'#8a5cf6',other:'#12353a'};
 const ic=(k,s=18,c='currentColor')=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${PATH[k]}"/></svg>`;
 const ICON=Object.fromEntries(Object.keys(PATH).map(k=>[k,k]));
-let sortBy='near',rad=0,qs='',lang=localStorage.gk_lang||'ar',tab='near',filter='all',pos={lat:31.2001,lng:29.9187},picked=null,picking=false,reqs=[];
+let UI={};try{UI=JSON.parse(localStorage.gk_ui||'{}')}catch(e){}
+let sortBy=UI.sortBy||'near',rad=UI.rad||0,qs='',lang=localStorage.gk_lang||'ar',tab=UI.tab||'near',filter=UI.filter||'all',pos={lat:31.2001,lng:29.9187},picked=null,picking=false,reqs=[];
 const ME='me',RATE=0.5; // 1 point = 0.5 EGP (demo rate)
 const t=k=>T[lang][k];
 // data layer: real backend when /api exists, else localStorage demo store
@@ -33,8 +34,11 @@ function wrender(){const b=wallet();document.getElementById('wbal').textContent=
 document.getElementById('walletBtn').onclick=()=>{wrender();document.getElementById('wdlg').showModal()};
 document.getElementById('wgo').onclick=()=>{const b=wallet(),num=document.getElementById('wn').value.trim();if(b<100)return toast(t('minw'));if(!/^01\d{9}$/.test(num))return toast(t('badnum'));const w=WD();w.push({pts:b,m:document.getElementById('wm').value,at:Date.now()});localStorage.gk_wd=JSON.stringify(w);toast(t('wdone'));wrender();render()};
 let fitted=0;
+document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
 async function load(){reqs=await store.list();render();if(!fitted&&reqs.length){fitted=1;const o=reqs.filter(r=>r.status!=='done').map(r=>[r.lat,r.lng]);if(o.length)map.fitBounds(o,{padding:[40,40],maxZoom:14})}}
+const saveUI=()=>localStorage.gk_ui=JSON.stringify({sortBy,rad,tab,filter});
 function render(){
+ saveUI();
  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
  document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
  document.getElementById('lang').setAttribute('aria-label',lang==='ar'?'Switch to English':'التبديل للعربية');document.getElementById('map').setAttribute('aria-label',lang==='ar'?'خريطة طلبات المساعدة':'Help requests map');document.getElementById('locate').setAttribute('aria-label',lang==='ar'?'حدد موقعي':'Locate me');document.getElementById('lang').textContent=lang==='ar'?'EN':'ع';document.getElementById('wallet').textContent=n(wallet());
