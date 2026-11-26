@@ -77,3 +77,5 @@ dlg.addEventListener('close',async()=>{picking=false;if(pickMark){pickMark.remov
  await store.add({title:f.get('title'),cat:f.get('cat'),reward:+f.get('reward')||20,urgent:!!f.get('urgent'),lat:at.lat,lng:at.lng});document.getElementById('form').reset();toast(t('posted'));load()});
 dlg.addEventListener('click',e=>{/* allow map interaction while open */});
 (async()=>{await store.init();await load()})();
+
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
