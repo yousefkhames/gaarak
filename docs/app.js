@@ -1,5 +1,5 @@
-const T={ar:{pts:'نقطة',addBtn:'+ اطلب مساعدة',hero:'محتاج حاجة؟ جارك قريب منك.',sub:'انزل مهمة صغيرة على الخريطة، أقرب جار يساعدك ويكسب نقاط تتحول لفلوس.',near:'حواليك',mine:'مهامي',board:'الأبطال',newTitle:'طلب مساعدة جديد',pick:'اضغط على الخريطة لتحديد المكان',what:'محتاج إيه؟',cat:'النوع',reward:'المكافأة (نقاط)',urgent:'مستعجل',cancel:'إلغاء',post:'انشر الطلب',all:'الكل',accept:'أنا هساعد',done:'تمت المساعدة',open:'مفتوح',taken:'جاري التنفيذ',finished:'خلصت',away:'بعد',empty:'مفيش مهام هنا دلوقتي',posted:'اتنشر طلبك',pickfirst:'حدد المكان على الخريطة الأول',got:'كسبت',egp:'جنيه تقريباً',you:'أنت',noMine:'لسه ماعملتش أو ماقبلتش مهام',cats:{groc:'مشتريات',tech:'تقنية',car:'عربية',care:'رعاية',move:'نقل',other:'حاجة تانية'}},
-en:{pts:'pts',addBtn:'+ Ask for help',hero:'Need a hand? Your neighbor is close.',sub:'Drop a small task on the map. The nearest neighbor helps and earns points that turn into cash.',near:'Nearby',mine:'My tasks',board:'Heroes',newTitle:'New help request',pick:'Tap the map to set the place',what:'What do you need?',cat:'Type',reward:'Reward (points)',urgent:'Urgent',cancel:'Cancel',post:'Post request',all:'All',accept:"I'll help",done:'Mark done',open:'Open',taken:'In progress',finished:'Done',away:'away',empty:'Nothing here right now',posted:'Request posted',pickfirst:'Pick a place on the map first',got:'You earned',egp:'EGP approx.',you:'You',noMine:'No tasks yet',cats:{groc:'Errands',tech:'Tech',car:'Car',care:'Care',move:'Moving',other:'Other'}}};
+const T={ar:{skip:'تخطي للقائمة',pts:'نقطة',addBtn:'+ اطلب مساعدة',hero:'محتاج حاجة؟ جارك قريب منك.',sub:'انزل مهمة صغيرة على الخريطة، أقرب جار يساعدك ويكسب نقاط تتحول لفلوس.',near:'حواليك',mine:'مهامي',board:'الأبطال',newTitle:'طلب مساعدة جديد',pick:'اضغط على الخريطة لتحديد المكان',what:'محتاج إيه؟',cat:'النوع',reward:'المكافأة (نقاط)',urgent:'مستعجل',cancel:'إلغاء',post:'انشر الطلب',all:'الكل',accept:'أنا هساعد',done:'تمت المساعدة',open:'مفتوح',taken:'جاري التنفيذ',finished:'خلصت',away:'بعد',empty:'مفيش مهام هنا دلوقتي',posted:'اتنشر طلبك',pickfirst:'حدد المكان على الخريطة الأول',got:'كسبت',egp:'جنيه تقريباً',you:'أنت',noMine:'لسه ماعملتش أو ماقبلتش مهام',cats:{groc:'مشتريات',tech:'تقنية',car:'عربية',care:'رعاية',move:'نقل',other:'حاجة تانية'}},
+en:{skip:'Skip to list',pts:'pts',addBtn:'+ Ask for help',hero:'Need a hand? Your neighbor is close.',sub:'Drop a small task on the map. The nearest neighbor helps and earns points that turn into cash.',near:'Nearby',mine:'My tasks',board:'Heroes',newTitle:'New help request',pick:'Tap the map to set the place',what:'What do you need?',cat:'Type',reward:'Reward (points)',urgent:'Urgent',cancel:'Cancel',post:'Post request',all:'All',accept:"I'll help",done:'Mark done',open:'Open',taken:'In progress',finished:'Done',away:'away',empty:'Nothing here right now',posted:'Request posted',pickfirst:'Pick a place on the map first',got:'You earned',egp:'EGP approx.',you:'You',noMine:'No tasks yet',cats:{groc:'Errands',tech:'Tech',car:'Car',care:'Care',move:'Moving',other:'Other'}}};
 const ICON={groc:'🛒',tech:'💻',car:'🚗',care:'🧓',move:'📦',other:'✨'};
 let lang=localStorage.gk_lang||'ar',tab='near',filter='all',pos={lat:31.2001,lng:29.9187},picked=null,picking=false,reqs=[];
 const ME='me',RATE=0.5; // 1 point = 0.5 EGP (demo rate)
@@ -16,7 +16,7 @@ function seed(){const B=[[31.2156,29.9553,'أحتاج حد يجيبلي أدوي
  return B.map((b,i)=>({id:'s'+i,lat:b[0],lng:b[1],title:b[2],cat:b[3],reward:b[4],urgent:!!b[5],by:b[6],status:'open',at:Date.now()-i*600000}))}
 const dist=(a,b)=>{const R=6371,r=x=>x*Math.PI/180,dl=r(b.lat-a.lat),dn=r(b.lng-a.lng);const h=Math.sin(dl/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
 const fmt=d=>d<1?Math.round(d*1000)+' m':d.toFixed(1)+' km';
-const map=L.map('map',{zoomControl:false}).setView([pos.lat,pos.lng],13);L.control.zoom({position:'topleft'}).addTo(map);
+const map=L.map('map',{zoomControl:false,keyboard:true}).setView([pos.lat,pos.lng],13);L.control.zoom({position:'topleft'}).addTo(map);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
 let layer=L.layerGroup().addTo(map),meMark=null,pickMark=null;
 const toast=m=>{const e=document.getElementById('toast');e.textContent=m;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200)};
@@ -25,7 +25,7 @@ async function load(){reqs=await store.list();render()}
 function render(){
  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
  document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
- document.getElementById('lang').textContent=lang==='ar'?'EN':'ع';document.getElementById('wallet').textContent=wallet();
+ document.getElementById('lang').setAttribute('aria-label',lang==='ar'?'Switch to English':'التبديل للعربية');document.getElementById('map').setAttribute('aria-label',lang==='ar'?'خريطة طلبات المساعدة':'Help requests map');document.getElementById('locate').setAttribute('aria-label',lang==='ar'?'حدد موقعي':'Locate me');document.getElementById('lang').textContent=lang==='ar'?'EN':'ع';document.getElementById('wallet').textContent=wallet();
  document.getElementById('catsel').innerHTML=Object.keys(ICON).map(k=>`<option value="${k}">${ICON[k]} ${T[lang].cats[k]}</option>`).join('');
  document.getElementById('chips').innerHTML=['all',...Object.keys(ICON)].map(k=>`<span class="chip ${filter===k?'on':''}" data-f="${k}">${k==='all'?t('all'):ICON[k]+' '+T[lang].cats[k]}</span>`).join('');
  layer.clearLayers();
@@ -42,13 +42,14 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&qu
 function card(r){const st={open:t('open'),taken:t('taken'),done:t('finished')}[r.status];
  let btn='';if(r.status==='open'&&r.by!==ME)btn=`<button class="primary" data-a="accept" data-id="${r.id}">${t('accept')}</button>`;
  if(r.status==='taken'&&r.helper===ME)btn=`<button class="primary" data-a="done" data-id="${r.id}">${t('done')}</button>`;
- return `<div class="card ${r.urgent?'urgent':''}" data-focus="${r.id}"><span class="pts">${r.reward} ${t('pts')}</span><h4>${ICON[r.cat]} ${esc(r.title)}</h4><div class="meta"><span>${r.by===ME?t('you'):esc(r.by)}</span><span>${fmt(r.d)} ${t('away')}</span><span class="st">${st}</span></div>${btn?`<div class="row">${btn}</div>`:''}</div>`}
+ return `<div class="card ${r.urgent?'urgent':''}" tabindex="0" role="group" aria-label="${esc(r.title)}" data-focus="${r.id}"><span class="pts">${r.reward} ${t('pts')}</span><h4>${ICON[r.cat]} ${esc(r.title)}</h4><div class="meta"><span>${r.by===ME?t('you'):esc(r.by)}</span><span>${fmt(r.d)} ${t('away')}</span><span class="st">${st}</span></div>${btn?`<div class="row">${btn}</div>`:''}</div>`}
 document.addEventListener('click',async e=>{
  const c=e.target.closest('.chip');if(c){filter=c.dataset.f;return render()}
  const tb=e.target.closest('[data-tab]');if(tb){tab=tb.dataset.tab;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b===tb));return render()}
  const a=e.target.closest('[data-a]');if(a){await store.act(a.dataset.id,a.dataset.a);if(a.dataset.a==='done'){const r=reqs.find(x=>x.id===a.dataset.id);toast(`${t('got')} ${r.reward} ${t('pts')} ≈ ${Math.round(r.reward*RATE)} ${t('egp')}`)}return load()}
- const f=e.target.closest('[data-focus]');if(f){const r=reqs.find(x=>x.id===f.dataset.focus);map.flyTo([r.lat,r.lng],15)}
+ const f=e.target.closest('[data-focus]');if(e.target.closest('button'))return;;if(f){const r=reqs.find(x=>x.id===f.dataset.focus);map.flyTo([r.lat,r.lng],15)}
 });
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.focus)e.target.click()});
 document.getElementById('lang').onclick=()=>{lang=lang==='ar'?'en':'ar';localStorage.gk_lang=lang;render()};
 document.getElementById('locate').onclick=()=>navigator.geolocation&&navigator.geolocation.getCurrentPosition(p=>{pos={lat:p.coords.latitude,lng:p.coords.longitude};map.flyTo([pos.lat,pos.lng],14);if(meMark)meMark.remove();meMark=L.circleMarker([pos.lat,pos.lng],{radius:9,color:'#fff',fillColor:'#1f77ff',fillOpacity:1,weight:3}).addTo(map);render()},()=>toast('GPS off'));
 const dlg=document.getElementById('dlg');

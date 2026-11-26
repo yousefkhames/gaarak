@@ -23,3 +23,8 @@ label{display:block;margin:10px 0}label span{display:block;font-size:13px;color:
 .pin{font-size:26px;filter:drop-shadow(0 3px 3px #0005)}
 .lb{display:flex;justify-content:space-between;padding:10px 14px;background:#fff;border-radius:12px;margin-bottom:6px}
 @media(max-width:800px){main{grid-template-columns:1fr;grid-template-rows:48vh 1fr}}
+
+.skip{position:absolute;inset-inline-start:8px;top:-60px;background:#fff;color:var(--ink);padding:8px 14px;border-radius:8px;z-index:3000}.skip:focus{top:8px}
+:focus-visible{outline:3px solid #1f77ff;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.mut,.meta{color:#4d6366}
