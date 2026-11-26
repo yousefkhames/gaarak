@@ -32,7 +32,8 @@ function wrender(){const b=wallet();document.getElementById('wbal').textContent=
  document.getElementById('whist').innerHTML=rows.map(x=>`<div class="lb"><span>${esc(x.l)}</span><b dir="ltr">${x.v}</b></div>`).join('')||`<p class="mut">${t('empty')}</p>`}
 document.getElementById('walletBtn').onclick=()=>{wrender();document.getElementById('wdlg').showModal()};
 document.getElementById('wgo').onclick=()=>{const b=wallet(),num=document.getElementById('wn').value.trim();if(b<100)return toast(t('minw'));if(!/^01\d{9}$/.test(num))return toast(t('badnum'));const w=WD();w.push({pts:b,m:document.getElementById('wm').value,at:Date.now()});localStorage.gk_wd=JSON.stringify(w);toast(t('wdone'));wrender();render()};
-async function load(){reqs=await store.list();render()}
+let fitted=0;
+async function load(){reqs=await store.list();render();if(!fitted&&reqs.length){fitted=1;const o=reqs.filter(r=>r.status!=='done').map(r=>[r.lat,r.lng]);if(o.length)map.fitBounds(o,{padding:[40,40],maxZoom:14})}}
 function render(){
  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
  document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
