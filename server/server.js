@@ -5,13 +5,16 @@ const load=()=>fs.existsSync(DB)?JSON.parse(fs.readFileSync(DB)):[];
 const save=d=>fs.writeFileSync(DB,JSON.stringify(d,null,1));
 const MIME={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'};
 const json=(res,c,o)=>{res.writeHead(c,{'content-type':'application/json'});res.end(JSON.stringify(o))};
-const body=req=>new Promise(r=>{let s='';req.on('data',c=>s+=c);req.on('end',()=>{try{r(JSON.parse(s||'{}'))}catch{r({})}})});
+const hits=new Map();const limited=ip=>{const n=Date.now(),a=(hits.get(ip)||[]).filter(t=>n-t<60000);a.push(n);hits.set(ip,a);return a.length>60};
+const body=req=>new Promise(r=>{let s='';req.on('data',c=>{s+=c;if(s.length>10000){s='';req.destroy()}});req.on('end',()=>{try{r(JSON.parse(s||'{}'))}catch{r({})}})});
 http.createServer(async(req,res)=>{
  const u=req.url.split('?')[0];
+ res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
+ if(u.startsWith('/api/')&&req.method!=='GET'&&limited(req.socket.remoteAddress))return json(res,429,{error:'slow down'});
  if(u==='/api/requests'&&req.method==='GET')return json(res,200,load());
  if(u==='/api/requests'&&req.method==='POST'){const b=await body(req);
   if(!b.title||typeof b.lat!=='number'||typeof b.lng!=='number')return json(res,400,{error:'title, lat, lng required'});
-  const d=load(),r={id:'r'+Date.now(),title:String(b.title).slice(0,80),cat:b.cat||'other',reward:Math.min(500,Math.max(5,+b.reward||20)),urgent:!!b.urgent,lat:b.lat,lng:b.lng,by:b.by||'me',status:'open',at:Date.now()};
+  const d=load(),r={id:'r'+Date.now(),title:String(b.title).replace(/[<>]/g,'').trim().slice(0,80),cat:b.cat||'other',reward:Math.min(500,Math.max(5,+b.reward||20)),urgent:!!b.urgent,lat:b.lat,lng:b.lng,by:b.by||'me',status:'open',at:Date.now()};
   d.unshift(r);save(d);return json(res,201,r)}
  const dm=u.match(/^\/api\/requests\/([\w-]+)$/);
  if(dm&&req.method==='DELETE'){const d=load().filter(x=>x.id!==dm[1]);save(d);return json(res,200,{ok:true})}
