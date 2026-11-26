@@ -10,7 +10,7 @@ const ME='me',RATE=0.5; // 1 point = 0.5 EGP (demo rate)
 const t=k=>T[lang][k];
 // data layer: real backend when /api exists, else localStorage demo store
 const store={
- async init(){try{const r=await fetch('api/requests');if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))throw 0;this.api=true}catch(e){this.api=false}},
+ async init(){if(location.hostname.endsWith('github.io')){this.api=false;return}try{const r=await fetch('api/requests');if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))throw 0;this.api=true}catch(e){this.api=false}},
  async list(){if(this.api)return (await fetch('api/requests')).json();let d=JSON.parse(localStorage.gk_reqs||'null');if(!d){d=seed();localStorage.gk_reqs=JSON.stringify(d)}return d},
  async save(d){localStorage.gk_reqs=JSON.stringify(d)},
  async add(r){if(this.api)return fetch('api/requests',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(r)});const d=await this.list();d.unshift({...r,id:'r'+Date.now(),status:'open',by:ME,at:Date.now()});await this.save(d)},
