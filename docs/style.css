@@ -47,3 +47,4 @@ label{display:block;margin:10px 0}label span{display:block;font-size:13px;color:
  dialog{margin:auto auto 0;width:100%;max-width:none;border-radius:22px 22px 0 0}
  .tabs{position:sticky;top:-14px;background:var(--bg);padding:6px 0;z-index:5}
 }
+#add::before{content:"+ ";font-weight:900}
