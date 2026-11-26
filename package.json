@@ -1,0 +1,1 @@
+{"name":"gaarak","version":"1.0.0","description":"Gaarak: neighborhood help-request map","scripts":{"start":"node server/server.js"},"license":"MIT"}
