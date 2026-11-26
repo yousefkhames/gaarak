@@ -48,3 +48,4 @@ label{display:block;margin:10px 0}label span{display:block;font-size:13px;color:
  .tabs{position:sticky;top:-14px;background:var(--bg);padding:6px 0;z-index:5}
 }
 #add::before{content:"+ ";font-weight:900}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.tools #q{grid-column:1/-1}
