@@ -19,6 +19,15 @@
   <img src="assets/mobile-dark-en.png" width="24%" alt="Gaarak mobile, dark mode, English">
 </p>
 
+## Screenshots
+
+Captured from the live site (https://yousefkhames.github.io/gaarak/).
+
+<p>
+  <img src="docs/screenshots/live-desktop.png" alt="gaarak desktop view" width="640">
+  <img src="docs/screenshots/live-mobile.png" alt="gaarak mobile view" width="200">
+</p>
+
 ## What it does
 
 Someone needs a hand: medicine from the pharmacy, a dead car battery, help with Wi-Fi. They tap the map, describe the task and set a reward in points. Neighbors see requests sorted by urgency and distance, accept one, finish it and collect points that convert to cash.
