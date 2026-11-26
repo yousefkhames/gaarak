@@ -52,6 +52,7 @@ input,select{width:100%;padding:10px;border:1px solid #d9d0bd;border-radius:10px
 #add::before{content:"+ ";font-weight:900}
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.tools #q{grid-column:1/-1}
 #pickbar{position:absolute;z-index:700;top:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 8px 8px 16px;border-radius:99px;display:flex;gap:10px;align-items:center;box-shadow:0 6px 18px #0004;white-space:nowrap}#pickbar[hidden]{display:none}#pickbar button{padding:4px 12px;min-height:32px}
+.flash{animation:flash 1.6s ease 2}@keyframes flash{50%{box-shadow:0 0 0 4px var(--or)}}.sh{margin-inline-start:auto;background:transparent;color:var(--mut);text-decoration:underline;min-height:36px}
 .safe{background:#fff3e8;border-radius:10px;padding:8px 12px;font-size:13px;margin:6px 0}.stars button{background:transparent;color:#f5a623;font-size:22px;padding:0 4px;min-height:36px}
 .walletBtn{background:transparent;color:#fff;display:flex;gap:6px;align-items:center;padding:2px 4px}.bal{font-size:30px;font-weight:800;margin:6px 0}.bal small{font-size:14px;color:var(--mut);font-weight:400}#whist{max-height:160px;overflow:auto}
 
