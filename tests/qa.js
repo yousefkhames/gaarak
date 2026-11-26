@@ -12,6 +12,8 @@ const URL=process.argv[2]||'http://localhost:8123/';
    await p.goto(URL,{waitUntil:'networkidle2',timeout:30000});
    ok(await p.$$eval('.card',e=>e.length)>=5,'cards render');
    ok(await p.$eval('html',e=>e.dir)===(lang==='ar'?'rtl':'ltr'),'dir');
+   ok(await p.evaluate(()=>Object.keys(T.ar).every(k=>k in T.en)&&Object.keys(T.en).every(k=>k in T.ar)),'ar/en translation keys match');
+   ok(!(await p.$eval('body',e=>e.innerText)).includes('undefined'),'no undefined text');
    // post request
    await p.click('#add');const m=await p.$('#map');const bb=await m.boundingBox();
    await p.mouse.click(bb.x+bb.width/2,bb.y+bb.height/2-40);
