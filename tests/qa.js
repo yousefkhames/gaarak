@@ -6,7 +6,7 @@ const URL=process.argv[2]||'http://localhost:8123/';
  for(const [name,vp,lang] of [['desk-ar',{width:1300,height:800},'ar'],['desk-en',{width:1300,height:800},'en'],['mob-ar',{width:390,height:780,isMobile:true,hasTouch:true},'ar'],['mob-en',{width:390,height:780,isMobile:true,hasTouch:true},'en']]){
   const p=await b.newPage();await p.setViewport(vp);const errs=[];
   p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error'&&!/tile|ERR_|Failed to load resource/.test(m.text()))errs.push(m.text())});
-  await p.evaluateOnNewDocument(l=>{localStorage.gk_lang=l;if(!sessionStorage.x){localStorage.removeItem('gk_reqs');localStorage.removeItem('gk_wd');localStorage.removeItem('gk_ui');sessionStorage.x=1}},lang);
+  await p.evaluateOnNewDocument(l=>{localStorage.gk_lang=l;if(!sessionStorage.x){localStorage.removeItem('gk_reqs');localStorage.removeItem('gk_wd');localStorage.removeItem('gk_ui');localStorage.removeItem('gk_hid');sessionStorage.x=1}},lang);
   const ok=(c,m)=>{if(!c){fails++;console.log('FAIL',name,m)}};
   try{
    await p.goto(URL,{waitUntil:'networkidle2',timeout:30000});
@@ -21,15 +21,20 @@ const URL=process.argv[2]||'http://localhost:8123/';
    await new Promise(r=>setTimeout(r,500));
    ok((await p.$eval('#list',e=>e.innerText)).includes('QA test request'),'new request listed');
    // accept 3 tasks and finish
-   for(let i=0;i<3;i++){const btn=await p.$('[data-a=accept]');if(!btn){ok(false,'no accept btn');break}await btn.click();await new Promise(r=>setTimeout(r,250))}
+   for(let i=0;i<4;i++){const btn=await p.$('[data-a=accept]');if(!btn){ok(false,'no accept btn');break}await btn.evaluate(e=>e.scrollIntoView({block:'center'}));await btn.click();await new Promise(r=>setTimeout(r,250))}
    await p.evaluate(()=>document.querySelectorAll('.tabs button')[1].click());await new Promise(r=>setTimeout(r,250));
-   for(let i=0;i<3;i++){const btn=await p.$('[data-a=done]');if(btn){await btn.click();await new Promise(r=>setTimeout(r,250))}}
+   for(let i=0;i<4;i++){const btn=await p.$('[data-a=done]');if(btn){await btn.evaluate(e=>e.scrollIntoView({block:'center'}));await btn.click();await new Promise(r=>setTimeout(r,250))}}
    const bal=await p.$eval('#wallet',e=>e.textContent);ok(/[1-9١-٩]/.test(bal),'wallet earns points: '+bal);
    // wallet withdraw
    await p.click('#walletBtn');await new Promise(r=>setTimeout(r,200));ok(await p.$eval('#wdlg',e=>e.open),'wallet opens');
    await p.type('#wn','01012345678');await p.click('#wgo');await new Promise(r=>setTimeout(r,300));
    ok((await p.$eval('#wallet',e=>e.textContent)).replace(/[0٠]/g,'')==='' ,'balance zero after withdraw');
    await p.keyboard.press('Escape');
+   // extra: share fallback, report hides, cancel own, empty state
+   await p.evaluate(()=>document.querySelectorAll('.tabs button')[0].click());await new Promise(r=>setTimeout(r,250));
+   const before=await p.$$eval('.card',e=>e.length);
+   const rp=await p.$('[data-report]');if(rp){await rp.evaluate(e=>e.scrollIntoView({block:'center'}));await rp.click();await new Promise(r=>setTimeout(r,250));ok(await p.$$eval('.card',e=>e.length)===before-1,'report hides a card')}else ok(before===0,'report btn');
+   await p.type('#q','zzzz-nothing');await new Promise(r=>setTimeout(r,250));ok(await p.$('[data-addcta]')!==null,'empty state shows CTA');
    // lang toggle
    await p.click('#lang');await new Promise(r=>setTimeout(r,200));ok(await p.$eval('html',e=>e.dir)!==(lang==='ar'?'rtl':'ltr'),'lang toggle flips dir');
    // overflow check

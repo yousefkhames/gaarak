@@ -37,6 +37,7 @@ input,select{width:100%;padding:10px;border:1px solid #d9d0bd;border-radius:10px
 .leaflet-container{font-family:inherit}
 
 @media(max-width:800px){
+ aside{scroll-padding-bottom:96px;scroll-padding-top:60px}
  body{height:100dvh}
  header{padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top))}
  main{grid-template-columns:1fr;grid-template-rows:42% 1fr}
@@ -54,6 +55,8 @@ input,select{width:100%;padding:10px;border:1px solid #d9d0bd;border-radius:10px
 #pickbar{position:absolute;z-index:700;top:12px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 8px 8px 16px;border-radius:99px;display:flex;gap:10px;align-items:center;box-shadow:0 6px 18px #0004;white-space:nowrap}#pickbar[hidden]{display:none}#pickbar button{padding:4px 12px;min-height:32px}
 .flash{animation:flash 1.6s ease 2}@keyframes flash{50%{box-shadow:0 0 0 4px var(--or)}}.sh:first-of-type{margin-inline-start:auto}.sh{background:transparent;color:var(--mut);text-decoration:underline;min-height:36px}
 .empty{text-align:center;padding:24px 8px}.empty p{color:var(--mut)}
+.st.u{background:#fde6e9;color:#c0283c}
+.sk{height:92px;border-radius:16px;margin-bottom:10px;background:linear-gradient(90deg,#e9e2d1 25%,#f4efe3 50%,#e9e2d1 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}
 .safe{background:#fff3e8;border-radius:10px;padding:8px 12px;font-size:13px;margin:6px 0}.stars button{background:transparent;color:#f5a623;font-size:22px;padding:0 4px;min-height:36px}
 .walletBtn{background:transparent;color:#fff;display:flex;gap:6px;align-items:center;padding:2px 4px}.bal{font-size:30px;font-weight:800;margin:6px 0}.bal small{font-size:14px;color:var(--mut);font-weight:400}#whist{max-height:160px;overflow:auto}
 
