@@ -14,7 +14,7 @@ http.createServer(async(req,res)=>{
  if(u==='/api/requests'&&req.method==='GET')return json(res,200,load());
  if(u==='/api/requests'&&req.method==='POST'){const b=await body(req);
   if(!b.title||typeof b.lat!=='number'||typeof b.lng!=='number')return json(res,400,{error:'title, lat, lng required'});
-  const d=load(),r={id:'r'+Date.now(),title:String(b.title).replace(/[<>]/g,'').trim().slice(0,80),cat:b.cat||'other',reward:Math.min(500,Math.max(5,+b.reward||20)),urgent:!!b.urgent,lat:b.lat,lng:b.lng,by:b.by||'me',status:'open',at:Date.now()};
+  const d=load(),r={id:'r'+Date.now(),desc:String(b.desc||'').replace(/[<>]/g,'').slice(0,200),title:String(b.title).replace(/[<>]/g,'').trim().slice(0,80),cat:b.cat||'other',reward:Math.min(500,Math.max(5,+b.reward||20)),urgent:!!b.urgent,lat:b.lat,lng:b.lng,by:b.by||'me',status:'open',at:Date.now()};
   d.unshift(r);save(d);return json(res,201,r)}
  const dm=u.match(/^\/api\/requests\/([\w-]+)$/);
  if(dm&&req.method==='DELETE'){const d=load().filter(x=>x.id!==dm[1]);save(d);return json(res,200,{ok:true})}
