@@ -72,9 +72,12 @@ document.getElementById('sort').onchange=e=>{sortBy=e.target.value;render()};doc
 document.getElementById('lang').onclick=()=>{lang=lang==='ar'?'en':'ar';localStorage.gk_lang=lang;render()};
 document.getElementById('locate').onclick=()=>navigator.geolocation&&navigator.geolocation.getCurrentPosition(p=>{pos={lat:p.coords.latitude,lng:p.coords.longitude};map.flyTo([pos.lat,pos.lng],14);if(meMark)meMark.remove();meMark=L.circleMarker([pos.lat,pos.lng],{radius:9,color:'#fff',fillColor:'#1f77ff',fillOpacity:1,weight:3}).addTo(map);render()},()=>toast('GPS off'));
 const dlg=document.getElementById('dlg');
-document.getElementById('add').onclick=()=>{picking=true;picked=null;toast(t('pick'))};
+const stopPick=()=>{picking=false;document.getElementById('pickbar').hidden=true;if(pickMark){pickMark.remove();pickMark=null}};
+document.getElementById('add').onclick=()=>{picking=true;picked=null;document.getElementById('pickbar').hidden=false};
+document.getElementById('pcancel').onclick=stopPick;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&picking&&!dlg.open)stopPick()});
 map.on('click',e=>{if(!picking)return;picked=e.latlng;if(pickMark)pickMark.remove();pickMark=L.marker(e.latlng).addTo(map);if(!dlg.open)dlg.showModal();document.getElementById('pickhint').textContent='✓ '+e.latlng.lat.toFixed(4)+', '+e.latlng.lng.toFixed(4)});
-dlg.addEventListener('close',async()=>{picking=false;if(pickMark){pickMark.remove();pickMark=null}
+dlg.addEventListener('close',async()=>{const wasPicking=picking;stopPick();if(pickMark){pickMark.remove();pickMark=null}
  if(dlg.returnValue!=='ok')return;const f=new FormData(document.getElementById('form'));const at=picked||{lat:pos.lat+(Math.random()-.5)*.01,lng:pos.lng+(Math.random()-.5)*.01};
  await store.add({title:f.get('title'),cat:f.get('cat'),reward:+f.get('reward')||20,urgent:!!f.get('urgent'),lat:at.lat,lng:at.lng});document.getElementById('form').reset();toast(t('posted'));load()});
 dlg.addEventListener('click',e=>{/* allow map interaction while open */});
