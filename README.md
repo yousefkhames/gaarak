@@ -82,3 +82,10 @@ Accounts and phone verification, a hosted shared backend, real-time updates, cha
 ## License
 
 MIT. Map data © OpenStreetMap contributors.
+
+
+## Demo / portfolio project
+
+Static GitHub Pages site. Data stays in your browser. Sample data is fictional and results are not professional, legal, medical or financial advice.
+
+By Yousef Khames · من تطوير يوسف خميس
